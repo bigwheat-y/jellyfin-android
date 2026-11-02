@@ -8,3 +8,6 @@ build
 /captures
 .externalNativeBuild
 .cxx
+
+/app/libs/libtailscale.aar
+/.tailscale-build/

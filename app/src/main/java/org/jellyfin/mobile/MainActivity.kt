@@ -5,6 +5,7 @@ import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
 import android.graphics.Color
+import android.net.VpnService
 import android.os.Bundle
 import android.os.IBinder
 import android.provider.Settings
@@ -21,12 +22,17 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.withStarted
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import org.jellyfin.mobile.events.ActivityEventHandler
 import org.jellyfin.mobile.player.cast.Chromecast
 import org.jellyfin.mobile.player.cast.IChromecast
 import org.jellyfin.mobile.player.ui.PlayerFragment
 import org.jellyfin.mobile.setup.ConnectFragment
+import org.jellyfin.mobile.tailscale.TailscaleConfig
+import org.jellyfin.mobile.tailscale.TailscaleState
+import org.jellyfin.mobile.tailscale.TailscaleVpnService
 import org.jellyfin.mobile.utils.AndroidVersion
 import org.jellyfin.mobile.utils.BackPressInterceptor
 import org.jellyfin.mobile.utils.BluetoothPermissionHelper
@@ -132,7 +138,17 @@ class MainActivity : AppCompatActivity() {
 
         // Load UI
         lifecycleScope.launch {
-            mainViewModel.serverState.collectLatest { state ->
+            // 首次加载时等待私网隧道就绪，避免 WebView 提前访问服务器而显示连接失败。
+            var serverConnectionReleased = false
+            combine(mainViewModel.serverState, TailscaleState.status) { state, vpn ->
+                val enabled = TailscaleConfig(this@MainActivity).enabled
+                if (!enabled || vpn.connected) serverConnectionReleased = true
+                if (state is ServerState.Available && enabled && !serverConnectionReleased) {
+                    ServerState.Unset
+                } else {
+                    state
+                }
+            }.distinctUntilChanged().collectLatest { state ->
                 lifecycle.withStarted {
                     handleServerState(state)
                 }
@@ -149,6 +165,12 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         orientationListener.enable()
+        val config = TailscaleConfig(this)
+        if (config.enabled && TailscaleConfig.isValidServerIp(config.serverIp) && VpnService.prepare(this) == null) {
+            runCatching { TailscaleVpnService.start(this) }.onFailure {
+                TailscaleState.update { it.copy(error = getString(R.string.tailscale_error_engine)) }
+            }
+        }
     }
 
     private fun handleServerState(state: ServerState) {

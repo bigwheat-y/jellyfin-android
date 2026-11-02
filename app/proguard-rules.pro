@@ -32,3 +32,8 @@
 -assumevalues class android.os.Build$VERSION {
   int SDK_INT return 21..2147483647;
 }
+
+# Go mobile 通过 JNI 回调平台接口，禁止重命名或移除这些入口。
+-keep class go.** { *; }
+-keep class libtailscale.** { *; }
+-keep class org.jellyfin.mobile.tailscale.** { *; }

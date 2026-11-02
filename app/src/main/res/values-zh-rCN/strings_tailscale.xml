@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tailscale_title">Tailscale 连接</string>
+    <string name="tailscale_settings_summary">在客户端内连接私网服务器</string>
+    <string name="tailscale_description">仅 Jellyfin 访问下方 IP 的流量进入 VPN，其他应用保持原有网络。Jellyfin 服务器地址请使用同一 IP，例如 http://100.x.x.x:8096。服务器需能通过你的 Tailscale 网络访问。外部播放器和投屏设备不共享此隧道。本版本暂不支持 MagicDNS 和子网路由。</string>
+    <string name="tailscale_control_url">Tailscale / Headscale 控制服务器（HTTPS）</string>
+    <string name="tailscale_invalid_control_url">请输入 HTTPS 根地址，不支持附带账号、查询参数或片段。</string>
+    <string name="tailscale_server_ip">服务器的 Tailscale IPv4 地址</string>
+    <string name="tailscale_connect">连接</string>
+    <string name="tailscale_disconnect">断开连接</string>
+    <string name="tailscale_login">打开设备授权 / 注册页面</string>
+    <string name="tailscale_logout">退出 Tailscale 登录</string>
+    <string name="tailscale_back">返回 Jellyfin</string>
+    <string name="tailscale_stopped">未连接</string>
+    <string name="tailscale_connected">通往 %1$s 的隧道已就绪，请返回 Jellyfin 连接服务器。</string>
+    <string name="tailscale_connecting">正在连接私网…</string>
+    <string name="tailscale_needs_approval">请在 Tailscale 管理后台批准此设备，然后返回。</string>
+    <string name="tailscale_needs_login">请打开授权或注册页面，完成此设备注册后返回。Headscale 可能需要管理员批准设备。</string>
+    <string name="tailscale_invalid_ip">请输入 100.64.0.0/10 范围内的 Tailscale IPv4 地址，不支持 URL、域名、网段或 DNS 服务地址。</string>
+    <string name="tailscale_vpn_notice">Android 每个用户只能运行一个 VPN，连接可能会停止其他 VPN 应用。本隧道仅处理 Jellyfin 访问指定服务器的流量。打开 Jellyfin 时会自动重连，播放期间可持续运行；点击“断开连接”即可停止。</string>
+    <string name="tailscale_permission_denied">尚未获得系统 VPN 授权，请点击“连接”重试。</string>
+    <string name="tailscale_error_engine">Tailscale 未能建立连接。请断开后重试，并检查网络和系统 VPN 授权。</string>
+    <string name="tailscale_no_browser">没有可用于打开授权页面的浏览器。</string>
+    <string name="tailscale_logout_notice">是否断开连接并退出此设备的 Tailscale 登录？再次连接时需要重新授权账号。</string>
+    <string name="tailscale_notification">Jellyfin 到 %1$s 的私网连接</string>
+</resources>

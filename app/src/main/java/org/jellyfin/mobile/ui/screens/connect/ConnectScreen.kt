@@ -1,5 +1,7 @@
 package org.jellyfin.mobile.ui.screens.connect
 
+import android.content.Intent
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.jellyfin.mobile.MainViewModel
 import org.jellyfin.mobile.R
+import org.jellyfin.mobile.tailscale.TailscaleActivity
 import org.jellyfin.mobile.events.ActivityEvent
 import org.jellyfin.mobile.events.ActivityEventHandler
 import org.jellyfin.mobile.ui.utils.CenterRow
@@ -39,6 +42,11 @@ fun ConnectScreen(
                 .padding(horizontal = 16.dp),
         ) {
             LogoHeader()
+            val context = LocalContext.current
+            StyledTextButton(
+                onClick = { context.startActivity(Intent(context, TailscaleActivity::class.java)) },
+                text = stringResource(R.string.tailscale_title),
+            )
             ServerSelection(
                 showExternalConnectionError = showExternalConnectionError,
                 onConnected = { hostname ->

@@ -95,3 +95,7 @@ There are two flavors (variants) of the Jellyfin for Android app:
 The proprietary version is available on [Google Play](https://play.google.com/store/apps/details?id=org.jellyfin.mobile) and the [Amazon Appstore](https://www.amazon.com/gp/aw/d/B081RFTTQ9), while the libre version is available on [F-Droid](https://f-droid.org/en/packages/org.jellyfin.mobile/).
 Additionally, `beta` releases exist for both flavors, but only the proprietary version is published to a beta track on [Google Play](https://play.google.com/store/apps/details?id=org.jellyfin.mobile).
 If you'd like to test the beta outside of Google Play, you can simply download it from the [GitHub releases](https://github.com/jellyfin/jellyfin-android/releases/latest).
+
+## 内置 Tailscale（定制版本）
+
+本版本增加仅供 Jellyfin 使用的 Tailscale VPN。使用方式、原生引擎构建和功能边界见 [集成说明](docs/tailscale.md)。

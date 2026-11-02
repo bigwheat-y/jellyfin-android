@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SYSTEM_EXEMPTED" />
     <uses-permission
         android:name="android.permission.BLUETOOTH"
         android:maxSdkVersion="30"
@@ -63,6 +65,24 @@
             </intent-filter>
         </activity>
 
+
+        <activity
+            android:name=".tailscale.TailscaleActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme" />
+
+        <!-- 仅由系统绑定 VPN 服务。prepare 授权后的 VPN 符合 systemExempted 条件；Lint 未识别此例外，无需闹钟权限。 -->
+        <service
+            android:name=".tailscale.TailscaleVpnService"
+            android:exported="false"
+            android:permission="android.permission.BIND_VPN_SERVICE"
+            android:foregroundServiceType="systemExempted"
+            tools:ignore="ForegroundServicePermission">
+            <intent-filter>
+                <action android:name="android.net.VpnService" />
+            </intent-filter>
+            <meta-data android:name="android.net.VpnService.SUPPORTS_ALWAYS_ON" android:value="false" />
+        </service>
 
         <service
             android:name=".webapp.RemotePlayerService"

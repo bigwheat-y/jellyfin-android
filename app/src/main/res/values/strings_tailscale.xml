@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tailscale_title">Tailscale connection</string>
+    <string name="tailscale_settings_summary">Connect to a private server from this app</string>
+    <string name="tailscale_description">Only Jellyfin traffic to the IP below uses this VPN. Other apps keep their normal connection. Use the same IP in your Jellyfin server URL, for example http://100.x.x.x:8096. The server must be reachable in your tailnet. External players and casting do not share this tunnel. MagicDNS and subnet routes are not supported in this version.</string>
+    <string name="tailscale_control_url">Tailscale / Headscale control server (HTTPS)</string>
+    <string name="tailscale_invalid_control_url">Enter an HTTPS root URL without credentials, query parameters, or a fragment.</string>
+    <string name="tailscale_server_ip">Server Tailscale IPv4 address</string>
+    <string name="tailscale_connect">Connect</string>
+    <string name="tailscale_disconnect">Disconnect</string>
+    <string name="tailscale_login">Open device authorization / registration</string>
+    <string name="tailscale_logout">Sign out of Tailscale</string>
+    <string name="tailscale_back">Return to Jellyfin</string>
+    <string name="tailscale_stopped">Disconnected</string>
+    <string name="tailscale_connected">Tunnel ready for %1$s. Return to Jellyfin to connect to your server.</string>
+    <string name="tailscale_connecting">Connecting to your private network…</string>
+    <string name="tailscale_needs_approval">Approve this device in the Tailscale admin console, then return here.</string>
+    <string name="tailscale_needs_login">Authorize or register this device with your control server, then return here. Headscale may require administrator approval.</string>
+    <string name="tailscale_invalid_ip">Enter a Tailscale IPv4 address in 100.64.0.0/10. Do not enter a URL, hostname, subnet, or DNS service address.</string>
+    <string name="tailscale_vpn_notice">Android allows one active VPN per user. Connecting may stop another VPN app. This tunnel only handles Jellyfin traffic to your selected server. It reconnects when you open Jellyfin and can remain active during playback. Use Disconnect to stop it.</string>
+    <string name="tailscale_permission_denied">VPN permission was not granted. Tap Connect to try again.</string>
+    <string name="tailscale_error_engine">Tailscale could not establish the connection. Disconnect and retry. Check your network and Android VPN authorization.</string>
+    <string name="tailscale_no_browser">No browser could open the authorization page.</string>
+    <string name="tailscale_logout_notice">Disconnect and sign this device out of Tailscale? Account authorization will be required to connect again.</string>
+    <string name="tailscale_notification">Private connection for Jellyfin to %1$s</string>
+</resources>

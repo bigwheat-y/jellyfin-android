@@ -125,6 +125,7 @@ android {
 base.archivesName.set("jellyfin-android-v${project.getVersionName()}")
 
 dependencies {
+    implementation(files("libs/libtailscale.aar"))
     val proprietaryImplementation by configurations
 
     // Kotlin
@@ -226,3 +227,13 @@ tasks {
         }
     }
 }
+
+// 原生引擎必须从锁定的官方源码构建，避免缺失引擎时生成无法连接的客户端。
+val verifyTailscaleEngine by tasks.registering {
+    doLast {
+        check(file("libs/libtailscale.aar").isFile) {
+            "Missing Tailscale engine. Run scripts/build-tailscale.sh; see docs/tailscale.md."
+        }
+    }
+}
+tasks.named("preBuild") { dependsOn(verifyTailscaleEngine) }

@@ -24,5 +24,9 @@ jobs:
           java-version-file: .tools-versions
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
+      - name: Build embedded Tailscale engine
+        run: |
+          sdkmanager 'ndk;28.2.13676358'
+          ./scripts/build-tailscale.sh
       - name: Run test task
         run: ./gradlew test
