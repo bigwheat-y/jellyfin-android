@@ -29,6 +29,7 @@ import libtailscale.IPNService
 import libtailscale.Libtailscale
 import libtailscale.VPNServiceBuilder
 import org.jellyfin.mobile.R
+import timber.log.Timber
 import java.util.UUID
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -87,14 +88,18 @@ class TailscaleVpnService : VpnService(), IPNService {
         )
         callbackRegistered = true
         scope.launch {
+            var stage = "engine-init"
             try {
                 val engine = TailscaleEngine.get(this@TailscaleVpnService)
                 nativeLifecycle.withLock {
                     if (closed.get() || !config.enabled) return@launch
+                    stage = "vpn-attach"
                     Libtailscale.requestVPN(this@TailscaleVpnService)
                     attached = true
+                    stage = "control-connect"
                     engine.connect(config.controlUrl)
                 }
+                stage = "status-poll"
                 var loginRequested = false
                 while (isActive && !closed.get() && config.enabled) {
                     val status = engine.status()
@@ -108,8 +113,14 @@ class TailscaleVpnService : VpnService(), IPNService {
                     }
                     delay(2_000)
                 }
-            } catch (_: Exception) {
+            } catch (error: Exception) {
                 if (!closed.get()) {
+                    // 仅记录阶段、异常类型和脱敏后的短消息，不输出设备密钥或授权链接。
+                    val detail = error.message.orEmpty()
+                        .replace(Regex("""https?://\S+"""), "<url>")
+                        .replace(Regex("""(?i)(nodekey|privkey|mkey|tskey|authkey)\S*"""), "<redacted>")
+                        .take(240)
+                    Timber.e("Tailscale failed at %s: %s %s", stage, error.javaClass.simpleName, detail)
                     TailscaleState.update { it.copy(error = getString(R.string.tailscale_error_engine), tunnelActive = false) }
                     close()
                 }

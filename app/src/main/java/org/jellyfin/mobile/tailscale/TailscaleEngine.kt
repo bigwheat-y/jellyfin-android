@@ -63,7 +63,8 @@ internal class TailscaleEngine private constructor(context: Context) {
             }
         }
         val response = application.callLocalAPI(15_000, method, "/localapi/v0/$endpoint", stream)
-        val data = response.bodyBytes().toString(Charsets.UTF_8)
+        // start、login-interactive 等成功响应可以没有正文，Go 的 nil 切片在 JNI 中对应 null。
+        val data = response.bodyBytes()?.toString(Charsets.UTF_8).orEmpty()
         // 错误响应可能包含授权信息，不把原始正文写入日志或界面。
         check(response.statusCode() in 200..299) { "Tailscale API $endpoint: HTTP ${response.statusCode()}" }
         return if (data.trim().startsWith("{")) JSONObject(data) else JSONObject()
